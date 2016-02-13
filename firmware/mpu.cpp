@@ -12,8 +12,6 @@
 
 struct s_mympu mympu;
 
-struct s_quat { float w, x, y, z; }; 
-
 union u_quat {
 	struct s_quat _f;
 	long _l[4];
@@ -144,6 +142,10 @@ int mympu_update() {
 	q._f.y = (float)q._l[2] / (float)QUAT_SENS;
 	q._f.z = (float)q._l[3] / (float)QUAT_SENS;
 
+    mympu.quat.w = q._f.w;
+    mympu.quat.x = q._f.x;
+    mympu.quat.y = q._f.y;
+    mympu.quat.z = q._f.z;
 
 	quaternionToEuler( &q._f, &mympu.ypr[2], &mympu.ypr[1], &mympu.ypr[0] );
 	

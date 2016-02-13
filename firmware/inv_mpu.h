@@ -18,8 +18,6 @@
  *                  MPU9250 (or MPU6500 w/ AK8963 on the auxiliary bus)
  */
 
-#define MPU6050 1
-
 #ifndef _INV_MPU_H_
 #define _INV_MPU_H_
 

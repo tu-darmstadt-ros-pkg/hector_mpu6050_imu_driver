@@ -7,14 +7,41 @@
 #include "mpu.h"
 #include "I2Cdev.h"
 
+#include <ros.h>
+#include <ros/time.h>
+#include <geometry_msgs/Quaternion.h>
+#include <std_msgs/UInt32.h>
+
+ros::NodeHandle nh;
+
+geometry_msgs::Quaternion quat_msg;
+ros::Publisher quat_pub("quaternion", &quat_msg);
+/*
+std_msgs::UInt32 success_msg;
+ros::Publisher success_pub("success_packets", &success_msg);
+
+std_msgs::UInt32 no_msg;
+ros::Publisher no_pub("no_packets", &no_msg);
+
+std_msgs::Int8 corrupted_msg;
+ros::Publisher corrupted_pub("corrupted_packets", &corrupted_msg);
+
+std_msgs::Int8 overflow_msg;
+ros::Publisher overflow_pub("overflow_packets", &overflow_msg);
+*/
 int ret;
 void setup() {
     Fastwire::setup(400,0);
-    Serial.begin(38400);
     ret = mympu_open(200);
-    Serial.print("MPU init: "); Serial.println(ret);
-    Serial.print("Free mem: "); Serial.println(freeRam());
-	
+
+    nh.initNode();
+
+    nh.advertise(quat_pub);
+    //nh.advertise(success_pub);
+    //nh.advertise(no_pub);
+    //nh.advertise(corrupted_pub);
+    //nh.advertise(overflow_pub);
+
 }
 
 unsigned int c = 0; //cumulative number of successful MPU/DMP reads
@@ -23,6 +50,9 @@ unsigned int err_c = 0; //cumulative number of MPU/DMP reads that brought corrup
 unsigned int err_o = 0; //cumulative number of MPU/DMP reads that had overflow bit set
 
 void loop() {
+
+    nh.spinOnce();
+
     ret = mympu_update();
 
     switch (ret) {
@@ -30,20 +60,28 @@ void loop() {
 	case 1: np++; return;
 	case 2: err_o++; return;
 	case 3: err_c++; return; 
-	default: 
-		Serial.print("READ ERROR!  ");
-		Serial.println(ret);
+    default:
 		return;
     }
+/*
+    success_msg.data = c;
+    success_pub.publish(&success_msg);
+    no_msg.data = np;
+    no_pub.publish(&no_msg);
 
+    corrupted_msg.data = err_c;
+    corrupted_pub.publish(&corrupted_msg);
+    overflow_msg.data = err_o;
+    overflow_pub.publish(&overflow_msg);
+    */
     if (!(c%25)) {
-	    Serial.print(np); Serial.print("  "); Serial.print(err_c); Serial.print(" "); Serial.print(err_o);
-	    Serial.print(" Y: "); Serial.print(mympu.ypr[0]);
-	    Serial.print(" P: "); Serial.print(mympu.ypr[1]);
-	    Serial.print(" R: "); Serial.print(mympu.ypr[2]);
-	    Serial.print("\tgy: "); Serial.print(mympu.gyro[0]);
-	    Serial.print(" gp: "); Serial.print(mympu.gyro[1]);
-	    Serial.print(" gr: "); Serial.println(mympu.gyro[2]);
+
+        quat_msg.w = mympu.quat.w;
+        quat_msg.x = mympu.quat.x;
+        quat_msg.y = mympu.quat.y;
+        quat_msg.z = mympu.quat.z;
+
+        quat_pub.publish(&quat_msg);
     }
 }
 

@@ -8,7 +8,7 @@ find_package(catkin REQUIRED COMPONENTS
   rosserial_arduino
   rosserial_client
   roscpp
-  sensor_msgs
+  geometry_msgs
 )
 
 catkin_package(

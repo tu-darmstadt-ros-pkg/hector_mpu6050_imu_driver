@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(hector_MPU6050_imu_driver)
+project(hector_mpu6050_imu_driver)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -24,5 +24,5 @@ rosserial_configure_client(
   TOOLCHAIN_FILE ${ROSSERIAL_ARDUINO_TOOLCHAIN}
 )
 
-rosserial_add_client_target(firmware MPU6050_imu ALL)
-rosserial_add_client_target(firmware MPU6050_imu-upload)
+rosserial_add_client_target(firmware mpu6050_imu ALL)
+rosserial_add_client_target(firmware mpu6050_imu-upload)

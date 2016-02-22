@@ -6,7 +6,7 @@ include_directories(${ROS_LIB_DIR} ../lib)
 #add_definitions(-DUSB_CON)
 add_definitions(-DMPU6050)
 
-generate_arduino_firmware(MPU6050_imu
+generate_arduino_firmware(mpu6050_imu
   SRCS MPU6050_IMU.cpp ${ROS_LIB_DIR}/time.cpp
   BOARD nano328
   PORT /dev/ttyUSB0

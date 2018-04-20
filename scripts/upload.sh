@@ -6,4 +6,4 @@
 #catkin_make hector_mpu6050_imu_driver_firmware_mpu6050_imu-upload
 
 # For use with catkin tools, see https://github.com/ros-drivers/rosserial/issues/244
-catkin build --no-deps hector_mpu6050_imu_driver --make-args hector_mpu6050_imu_driver_firmware_mpu6050_imu-upload
+catkin build --no-deps --interleave hector_mpu6050_imu_driver --make-args hector_mpu6050_imu_driver_firmware_mpu6050_imu-upload
